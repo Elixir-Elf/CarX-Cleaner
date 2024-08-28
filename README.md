@@ -1,76 +1,108 @@
-<img src="images/logo/carx_cleaner_logo.png" alt="CarX Cleaner Logo" style="display: block; margin-left: auto; margin-right: auto; width: 150px;">
+<p align="center">
+  <img src="images/logo/carx_cleaner_logo.png" alt="Logo">
+</p>
 
-# CarX Cleaner
+<p align="center">
+  CarX Cleaner is a tool that is designed to remove mods from CarX eliminating the requirement to do some manually. This tool ensures that only un-original (modded) files and directories are removed, preserving the integrity of the original game files.
+</p>
 
-CarX Cleaner is a tool that is designed to remove mods from CarX eliminating the requirement to do some manually. This tool ensures that only un-original (modded) files and directories are removed, preserving the integrity of the original game files.
+<h2 align="center">Features</h2>
+<p align="center">
+ Removes un-original files and directories
+ </p>
+ <p align="center">
+ Preserves original files and directories
+</p>
+<p align="center">
+User-friendly PyQt5 GUI
+</p>
+<p align="center">
+Supports relative paths for universal compatibility
+</p>
 
-## Features
 
-- Removes un-original files and directories
-- Preserves original files and directories
-- User-friendly PyQt5 GUI
-- Supports relative paths for universal compatibility
+<h2 align="center">Installation</h2>
+<p align="center">
+</p>
 
-## Installation
+<p align="center">
+<strong>Prerequisites:</strong>
+</p>
 
-### Prerequisites
+<p align="center">
+Python 3.x
+</p>
+<p align="center">
+PyQt5
+</p>
 
-- Python 3.x
-- PyQt5
+<h2 align="center">Steps</h2>
+<p align="center">
+</p>
 
-### Steps
 
-1. **Clone the repository:**
+<p align="center">
+<strong>Clone into the Repository:</strong>
+</p>
 
-    ```sh
     git clone https://github.com/Elixir-Elf/CarX-Cleaner.git
     cd CarX-Cleaner
-    ```
 
-2. **Install the required dependencies:**
 
-    ```sh
+<p align="center">
+<strong>Install the required dependencies:</strong>
+</p>
+
     pip install -r requirements.txt
-    ```
 
-3. **Run the application:**
 
-    ```sh
+<p align="center">
+<strong>Run the application:</strong>
+</p>
+
     python main.py
-    ```
 
-## Usage
+<h2 align="center">Usage</h2>
+<p align="center">
+</p>
 
-1. **Input the game directory path:**
+<p align="center">
+<strong>Input the game directory path:</strong>
+<p align="center">
+Open the application and input the full directory path of the game installation in the provided text box.
+</p>
 
-    Open the application and input the full directory path of the game installation in the provided text box.
+<p align="center">
+<strong>Start the cleaning process:</strong>
+<p align="center">
+Click the "Start Cleaning" button to begin the cleaning process. The progress bar will update to show the progress, and the status label will indicate the current status (Ready, In-Progress, Completed, Error).
+</p>
 
-2. **Start the cleaning process:**
-
-    Click the "Start Cleaning" button to begin the cleaning process. The progress bar will update to show the progress, and the status label will indicate the current status (Ready, In-Progress, Completed, Error).
-
-## TODO
-
-- [ ] Add a mod file backup feature
-
-## Contributing
-
+<h2 align="center">Contributing</h2>
+<p align="center">
 Contributions are welcome! Please follow these steps to contribute:
+</p>
 
+```sh
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature-branch`)
 3. Commit your changes (`git commit -am 'Add new feature'`)
 4. Push to the branch (`git push origin feature-branch`)
 5. Create a new Pull Request
+```
 
-## License
-
+<h2 align="center">License</h2>
+<p align="center">
 This project is licensed under the MIT License. See the LICENSE file for details.
+</p>
 
-## Acknowledgements
+<h2 align="center">Screenshot</h2>
+<p align="center">
+  <img src="images/screenshot/screenshot.PNG" alt="Logo">
+</p>
+</p>
 
-Special thanks to pepe-wizard for providing massive amounts of support and code snippets!
-
-## Contact
-
-For any questions or feedback, please contact yourname@example.com.
+<h2 align="center">Acknowledgements</h2>
+<p align="center">
+Special thanks to <a href="https://github.com/pepe-wizard">pepe-wizard</a> for providing massive amounts of support and code snippets!
+</p>
