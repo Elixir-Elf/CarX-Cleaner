@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from cleaner import start_cleaning_process
+from src.cleaner.cleaner import start_cleaning_process
 
 def select_directory():
     directory = filedialog.askdirectory()

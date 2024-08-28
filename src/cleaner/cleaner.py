@@ -1,6 +1,6 @@
 import os
-from helpers.find import find_files_for_hashing
-from helpers.attributes import generate_file_hash
+from src.helpers.find import find_files_for_hashing
+from src.helpers.attributes import generate_file_hash
 
 def start_cleaning_process(directory):
     original_hashes = {'original_file1_hash', 'original_file2_hash'}
