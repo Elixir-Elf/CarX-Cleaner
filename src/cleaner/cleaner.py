@@ -3,7 +3,7 @@ from src.helpers.find import find_files_for_hashing
 from src.helpers.attributes import generate_file_hash
 
 def start_cleaning_process(directory):
-    original_hashes = {'original_file1_hash', 'original_file2_hash'}
+    original_hashes = {'original_file1_hash', 'original_file2_hash'}  # Add original file hashes here
     modded_files = find_files_for_hashing(directory, original_hashes)
     for file in modded_files:
         os.remove(file)
