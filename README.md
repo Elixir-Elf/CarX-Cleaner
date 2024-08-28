@@ -71,7 +71,13 @@ PyQt5
 <p align="center">
 <strong>Input the game directory path:</strong>
 <p align="center">
-Open the application and input the full directory path of the game installation in the provided text box.
+Open the GUI and input the full directory path of the game installation in the provided text box.
+</p>
+
+<p align="center">
+<strong>Input the prefered backup directory path:</strong>
+<p align="center">
+Open the GUI and input a directory for your mod backups. (Base directory of the tool is prefered)
 </p>
 
 <p align="center">
