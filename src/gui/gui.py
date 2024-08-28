@@ -1,35 +1,145 @@
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk
+import sys
+from PyQt5 import QtCore, QtWidgets
 from src.cleaner.cleaner import start_cleaning_process
 
-def select_directory():
-    directory = filedialog.askdirectory()
-    return directory
+class DirProxyModel(QtCore.QSortFilterProxyModel):
+    def __init__(self, fsModel):
+        super().__init__()
+        self.fsModel = fsModel
+        self.setSourceModel(fsModel)
 
-def start_cleaning():
-    directory = select_directory()
-    if directory:
-        start_cleaning_process(directory)
+    def lessThan(self, left, right):
+        leftIsDir = self.fsModel.fileInfo(left).isDir()
+        if leftIsDir != self.fsModel.fileInfo(right).isDir():
+            return leftIsDir
+        return super().lessThan(left, right)
 
-root = tk.Tk()
-root.title("CarX Cleaner")
-root.geometry("600x500")
+    def flags(self, index):
+        flags = super().flags(index)
+        if not self.fsModel.fileInfo(self.mapToSource(index)).isDir():
+            flags &= ~QtCore.Qt.ItemIsEnabled
+        return flags
 
-style = ttk.Style()
-style.theme_use('clam')
-style.configure('TButton', background='#333', foreground='#fff', font=('Helvetica', 12))
-style.configure('TLabel', background='#333', foreground='#fff', font=('Helvetica', 12))
-style.configure('TFrame', background='#333')
+class CleaningThread(QtCore.QThread):
+    progress = QtCore.pyqtSignal(int)
+    status = QtCore.pyqtSignal(str)
 
-frame = ttk.Frame(root, padding="20")
-frame.pack(expand=True)
+    def __init__(self, directory):
+        super().__init__()
+        self.directory = directory
 
-select_button = ttk.Button(frame, text="Select CarX Directory", command=select_directory)
-clean_button = ttk.Button(frame, text="Start Cleaning", command=start_cleaning)
+    def run(self):
+        try:
+            self.status.emit("In-Progress")
+            start_cleaning_process(self.directory, self)
+            self.status.emit("Completed")
+        except Exception as e:
+            self.status.emit("Error")
+            print(f"Error during cleaning process: {e}")
 
-select_button.pack(pady=10)
-clean_button.pack(pady=10)
+    def setValue(self, value):
+        self.progress.emit(value)
 
-root.configure(bg='#333')
-root.mainloop()
+    def update(self):
+        pass
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("CarX Cleaner")
+        self.setGeometry(100, 100, 600, 500)
+        self.setStyleSheet("""
+            background-color: #2e2e2e; 
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        """)
+
+        self.central_widget = QtWidgets.QWidget()
+        self.setCentralWidget(self.central_widget)
+
+        self.layout = QtWidgets.QVBoxLayout(self.central_widget)
+        self.layout.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.label = QtWidgets.QLabel("Input CarX Directory Path:")
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setStyleSheet("""
+            color: #ffffff; 
+            padding: 10px; 
+            font-size: 16px;
+        """)
+        self.layout.addWidget(self.label)
+
+        self.lineEdit = QtWidgets.QLineEdit()
+        self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit.setStyleSheet("""
+            background-color: #3e3e3e; 
+            color: #ffffff; 
+            padding: 10px; 
+            border-radius: 5px;
+            font-size: 14px;
+        """)
+        self.layout.addWidget(self.lineEdit)
+
+        self.clean_button = QtWidgets.QPushButton("Start Cleaning", self)
+        self.clean_button.setStyleSheet("""
+            background-color: #5e5e5e; 
+            color: #ffffff; 
+            padding: 10px; 
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        """)
+        self.clean_button.clicked.connect(self.start_cleaning)
+        self.layout.addWidget(self.clean_button)
+
+        self.progress_bar = QtWidgets.QProgressBar(self)
+        self.progress_bar.setStyleSheet("""
+            QProgressBar {
+                background-color: #3e3e3e; 
+                color: #ffffff; 
+                border: 1px solid #5e5e5e; 
+                padding: 5px; 
+                text-align: center;
+                border-radius: 5px;
+            } 
+            QProgressBar::chunk {
+                background-color: #5e5e5e;
+                border-radius: 5px;
+            }
+        """)
+        self.progress_bar.setValue(0)
+        self.layout.addWidget(self.progress_bar)
+
+        self.status_label = QtWidgets.QLabel("Ready")
+        self.status_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.status_label.setStyleSheet("""
+            color: #ffffff; 
+            padding: 10px; 
+            font-size: 14px;
+        """)
+        self.layout.addWidget(self.status_label)
+
+    def start_cleaning(self):
+        directory = self.lineEdit.text()
+        if directory:
+            self.clean_button.setEnabled(False)
+            self.progress_bar.setValue(0)
+            self.status_label.setText("In-Progress")
+
+            self.cleaning_thread = CleaningThread(directory)
+            self.cleaning_thread.progress.connect(self.progress_bar.setValue)
+            self.cleaning_thread.status.connect(self.update_status)
+            self.cleaning_thread.finished.connect(self.cleaning_finished)
+            self.cleaning_thread.start()
+
+    def update_status(self, status):
+        self.status_label.setText(status)
+
+    def cleaning_finished(self):
+        self.clean_button.setEnabled(True)
+        self.progress_bar.setValue(0)
+
+app = QtWidgets.QApplication(sys.argv)
+window = MainWindow()
+window.show()
+sys.exit(app.exec_())
