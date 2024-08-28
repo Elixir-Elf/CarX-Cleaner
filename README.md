@@ -1,13 +1,13 @@
 # CarX Cleaner
 
-CarX Cleaner is a tool that is designed to remove mods from CarX eliminating the requirement to do some manually. This tool ensures that only un-original (modded) files and directories are removed, preserving the integrity of the original game files.
+CarX Cleaner is a tool that is designed to remove mods from CarX eliminating the requirement to do so manually. This tool ensures that only un-original (modded) files and directories are removed, preserving the integrity of the original game files.
 
 ## Features
 
 - Removes un-original files and directories
 - Preserves original files and directories
 - User-friendly PyQt5 GUI
-- Supports relative paths for universal compatibility
+- Utilizes MD5 Hashing (For Relative paths)
 
 ## Installation
 
