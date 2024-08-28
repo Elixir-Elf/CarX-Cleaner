@@ -25,14 +25,15 @@ class CleaningThread(QtCore.QThread):
     progress = QtCore.pyqtSignal(int)
     status = QtCore.pyqtSignal(str)
 
-    def __init__(self, directory):
+    def __init__(self, game_directory, backup_directory):
         super().__init__()
-        self.directory = directory
+        self.game_directory = game_directory
+        self.backup_directory = backup_directory
 
     def run(self):
         try:
             self.status.emit("In-Progress")
-            start_cleaning_process(self.directory, self)
+            start_cleaning_process(self.game_directory, self.backup_directory, self)
             self.status.emit("Completed")
         except Exception as e:
             self.status.emit("Error")
@@ -82,6 +83,26 @@ class MainWindow(QtWidgets.QMainWindow):
         """)
         self.layout.addWidget(self.lineEdit)
 
+        self.backup_label = QtWidgets.QLabel("Input Backup Directory Path:")
+        self.backup_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.backup_label.setStyleSheet("""
+            color: #ffffff; 
+            padding: 10px; 
+            font-size: 16px;
+        """)
+        self.layout.addWidget(self.backup_label)
+
+        self.backup_lineEdit = QtWidgets.QLineEdit()
+        self.backup_lineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.backup_lineEdit.setStyleSheet("""
+            background-color: #3e3e3e; 
+            color: #ffffff; 
+            padding: 10px; 
+            border-radius: 5px;
+            font-size: 14px;
+        """)
+        self.layout.addWidget(self.backup_lineEdit)
+
         self.clean_button = QtWidgets.QPushButton("Start Cleaning", self)
         self.clean_button.setStyleSheet("""
             background-color: #5e5e5e; 
@@ -122,13 +143,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.layout.addWidget(self.status_label)
 
     def start_cleaning(self):
-        directory = self.lineEdit.text()
-        if directory:
+        game_directory = self.lineEdit.text()
+        backup_directory = self.backup_lineEdit.text()
+        if game_directory and backup_directory:
             self.clean_button.setEnabled(False)
             self.progress_bar.setValue(0)
             self.status_label.setText("In-Progress")
 
-            self.cleaning_thread = CleaningThread(directory)
+            self.cleaning_thread = CleaningThread(game_directory, backup_directory)
             self.cleaning_thread.progress.connect(self.progress_bar.setValue)
             self.cleaning_thread.status.connect(self.update_status)
             self.cleaning_thread.finished.connect(self.cleaning_finished)

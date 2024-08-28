@@ -1,25 +1,25 @@
 import os
 import json
+import shutil
+import time
 from src.helpers.find import find_files_for_hashing
+from src.helpers.backup import backup_files
 
 def load_original_hashes(input_file):
     with open(input_file, 'r') as f:
         return json.load(f)
 
-def start_cleaning_process(directory, progress_bar):
-    original_hashes = load_original_hashes('src/hashes/relative_hashes.txt')
-    original_files = set(original_hashes.keys())
-    modded_files = find_files_for_hashing(directory, original_files)
-    
-    if not modded_files:
-        print("No modded files found. The directory is either empty or all files are original.")
-        return
-    
+def clean_files(directory, original_files, modded_files, backup_directory, progress_bar):
     total_files = len(modded_files)
     for index, file in enumerate(modded_files):
         relative_file = os.path.relpath(file, directory)
         if relative_file not in original_files:
             try:
+                backup_file_path = os.path.join(backup_directory, relative_file)
+                backup_dir = os.path.dirname(backup_file_path)
+                if not os.path.exists(backup_dir):
+                    os.makedirs(backup_dir)
+                shutil.copy2(file, backup_file_path)
                 os.remove(file)
             except Exception as e:
                 print(f"Error deleting file {file}: {e}")
@@ -33,18 +33,21 @@ def start_cleaning_process(directory, progress_bar):
             relative_dir = os.path.relpath(dir_path, directory)
             if relative_dir not in original_files:
                 try:
-                    for file in os.listdir(dir_path):
-                        file_path = os.path.join(dir_path, file)
-                        relative_file_path = os.path.relpath(file_path, directory)
-                        if relative_file_path not in original_files:
-                            if os.path.isfile(file_path):
-                                os.remove(file_path)
-                            elif os.path.isdir(file_path) and not os.listdir(file_path):
-                                os.rmdir(file_path)
-                    if not os.listdir(dir_path):
-                        os.rmdir(dir_path)
+                    shutil.rmtree(dir_path)
                 except Exception as e:
                     print(f"Error deleting directory {dir_path}: {e}")
 
-if __name__ == "__main__":
-    start_cleaning_process('path_to_carx_directory', None)
+def start_cleaning_process(game_directory, backup_base_directory, progress_bar=None):
+    original_hashes = load_original_hashes('src/hashes/relative_hashes.txt')
+    original_files = set(original_hashes.keys())
+    modded_files = find_files_for_hashing(game_directory, original_files)
+    
+    if not modded_files:
+        print("No modded files found. The directory is either empty or all files are original.")
+        return
+    
+    backup_directory = backup_files(modded_files, backup_base_directory)
+    
+    time.sleep(10)
+    
+    clean_files(game_directory, original_files, modded_files, backup_directory, progress_bar)

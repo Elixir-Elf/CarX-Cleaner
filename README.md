@@ -19,7 +19,9 @@ User-friendly PyQt5 GUI
 <p align="center">
 Supports relative paths for universal compatibility
 </p>
-
+<p align="center">
+Automatically backups mod files when provided with a path ensuring you don't lose mod data/progress
+</p>
 
 <h2 align="center">Installation</h2>
 <p align="center">
@@ -91,15 +93,15 @@ Contributions are welcome! Please follow these steps to contribute:
 5. Create a new Pull Request
 ```
 
-<h2 align="center">License</h2>
-<p align="center">
-This project is licensed under the MIT License. See the LICENSE file for details.
-</p>
-
 <h2 align="center">Screenshot</h2>
 <p align="center">
   <img src="images/screenshot/screenshot.PNG" alt="Logo">
 </p>
+</p>
+
+<h2 align="center">License</h2>
+<p align="center">
+This project is licensed under the MIT License. See the LICENSE file for details.
 </p>
 
 <h2 align="center">Acknowledgements</h2>
