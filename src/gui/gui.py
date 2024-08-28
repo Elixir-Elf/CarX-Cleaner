@@ -1,5 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import QIcon
 from src.cleaner.cleaner import start_cleaning_process
 
 class DirProxyModel(QtCore.QSortFilterProxyModel):
@@ -48,6 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.setWindowTitle("CarX Cleaner")
         self.setGeometry(100, 100, 600, 500)
+        self.setWindowIcon(QIcon("src/gui/icon/carx_cleaner_icon.png"))
         self.setStyleSheet("""
             background-color: #2e2e2e; 
             color: #ffffff;
