@@ -47,7 +47,7 @@ PyQt5
 <strong>Clone into the Repository:</strong>
 </p>
 
-    git clone https://github.com/Elixir-Elf/CarX-Cleaner.git
+    git clone https://github.com/n-xtt/CarX-Cleaner.git
     cd CarX-Cleaner
 
 
